@@ -1,0 +1,104 @@
+package br.com.ada.apostaapi.services;
+
+import br.com.ada.apostaapi.model.Aposta;
+import br.com.ada.apostaapi.model.ApostaRequest;
+import br.com.ada.apostaapi.model.Status;
+import br.com.ada.apostaapi.repositories.ApostaInMemoryRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.UUID;
+
+@RequiredArgsConstructor
+@Service
+@Slf4j
+public class ApostaService {
+    private final ApostaInMemoryRepository repository;
+    private final WebClient webClient;
+
+    private final ObjectMapper objectMapper;
+
+
+    public Mono<String> extrairElementoJson(String json, String elemento) throws JsonProcessingException {
+        JsonNode jsonNode = objectMapper.readTree(json);
+        String valor = jsonNode.get(elemento).asText();
+        return Mono.just(valor);
+    }
+
+    @SneakyThrows
+    public Mono<Aposta> save(ApostaRequest apostaRequest) {
+
+//  var jsonJogo = extrairElementoJson(webClient.get().uri( apostaRequest.jogoId()).retrieve().bodyToMono(JsonNode.class);
+
+
+        var aposta = Aposta.builder()
+                .apostaId(UUID.randomUUID())
+                .userId(UUID.fromString(apostaRequest.userId())) //pegar da api de usuarios
+                .jogoId(UUID.fromString(apostaRequest.jogoId())) // pegar da api de jogos
+                .valorAposta(apostaRequest.valorAposta())
+                .coefieciente(BigDecimal.valueOf(2)) // pegar da api de jogos
+                .time(apostaRequest.time()) // pegar da api de joos ou transformar em enum
+                .status(Status.NAO_INICIADO) //handler para atualizr
+                .criacao(Instant.now())
+                .receber(false)
+                .build();
+        return Mono.fromCallable(() -> {
+            log.info("Salvando aposta -{}", aposta);
+            return repository.save(aposta);
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
+
+    public Mono<Aposta> get(String uuid) {
+        return Mono.defer(() -> {
+            log.info("Buscando jogo - {}", uuid);
+            return Mono.justOrEmpty(repository.get(UUID.fromString(uuid)));
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
+
+    public Flux<Aposta> getAll() {
+        return Flux.defer(() -> {
+            log.info("Buscando todos as apostas");
+            return Flux.fromIterable(repository.getAll());
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
+    public Flux<Aposta> getAllByStatus(String status) {
+        return Flux.defer(() -> {
+            log.info("Buscando todos as Apostas pendentes");
+            return Flux.fromIterable(repository.getAll().stream().filter(aposta -> aposta.getStatus().toString().equalsIgnoreCase(status)).toList());
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
+
+    public Mono<Aposta> updateStatus(String uuid, String status) {
+
+
+        return Mono.defer(() -> {
+            log.info("Iniciando atualizacao de status");
+            var ApostaOptional = repository.get(UUID.fromString(uuid));
+            ApostaOptional.ifPresent(aposta -> {
+                if (status.equalsIgnoreCase(Status.EM_ANDAMENTO.toString()) && aposta.getStatus().equals(Status.NAO_INICIADO)) {
+                    aposta.setStatus(Status.valueOf(status.toUpperCase()));
+                    aposta.setModificacao(Instant.now());
+                } else if (status.equalsIgnoreCase(Status.ENCERRADO.toString()) && aposta.getStatus().equals(Status.EM_ANDAMENTO)) {
+                    aposta.setStatus(Status.valueOf(status.toUpperCase()));
+                    aposta.setModificacao(Instant.now());
+                    if (aposta.getTime().equalsIgnoreCase("ABC")){ //pegar o vencedor pela API JOGOS
+                        aposta.setReceber(true);
+                    }
+                }
+            });
+            return Mono.justOrEmpty(ApostaOptional);
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
+}
+
