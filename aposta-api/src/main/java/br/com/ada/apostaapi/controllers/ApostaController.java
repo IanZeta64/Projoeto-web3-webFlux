@@ -35,17 +35,17 @@ public class ApostaController {
                 .doOnError(err -> log.error("Error ao buscar apostas - {}", err.getMessage()))
                 .doOnNext(it -> log.info("Apostas recuperado com sucesso - {}", it));
     }
-    @GetMapping(params = "status")
-    public Flux<Aposta> getTodasApostaPorStatus(@RequestParam("status")String status){
-        return Flux.defer(() -> service.getAllByStatus(status)).subscribeOn(Schedulers.parallel())
-                .doOnError(err -> log.error("Error ao buscar apostas - {}", err.getMessage()))
-                .doOnNext(it -> log.info("Apostas recuperado com sucesso - {}", it));
-    }
+//    @GetMapping(params = "status")
+//    public Flux<Aposta> getTodasApostaPorStatus(@RequestParam("status")String status){
+//        return Flux.defer(() -> service.getAllByStatus(status)).subscribeOn(Schedulers.parallel())
+//                .doOnError(err -> log.error("Error ao buscar apostas - {}", err.getMessage()))
+//                .doOnNext(it -> log.info("Apostas recuperado com sucesso - {}", it));
+//    }
 
-    @PatchMapping(value = "/{id}", params = "status")
-    public Mono<Aposta> alterarStatus(@PathVariable("id") String uuid, @RequestParam("status")String status){//time = 1 mandante e 2 visitante
-        return Mono.defer(() -> service.updateStatus(uuid, status)).doOnError(err -> log.error("Error ao atualizar status - {}", err.getMessage()))
-                .doOnNext(it -> log.info("Status alterado - {}", it));
-    }
+//    @PatchMapping(value = "/{id}", params = "status")
+//    public Mono<Aposta> alterarStatus(@PathVariable("id") String uuid, @RequestParam("status")String status){//time = 1 mandante e 2 visitante
+//        return Mono.defer(() -> service.authorizeBet(uuid, status)).doOnError(err -> log.error("Error ao atualizar status - {}", err.getMessage()))
+//                .doOnNext(it -> log.info("Status alterado - {}", it));
+//    }
 
 }

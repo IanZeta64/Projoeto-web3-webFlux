@@ -16,7 +16,7 @@ public class Aposta {
     private Double coefieciente;
     private BigDecimal valorApostado;
     private BigDecimal valorPremiacao;
-    private String time;
+    private String timeApostado;
     private Status status;
     private Instant criacao;
     private Instant modificacao;

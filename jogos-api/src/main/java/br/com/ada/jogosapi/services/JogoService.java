@@ -21,6 +21,7 @@ import java.util.UUID;
 public class JogoService {
 //    private final JogoRepository repository;
 
+
     private final JogoInMemoryRepository repository;
     public Mono<Jogo> save(JogoRequest jogoRequest){
         var jogo = Jogo.builder()
@@ -99,6 +100,9 @@ public class JogoService {
                     }else{
                         jogo.setVencedor("Empate");
                     }
+                    //COLOCAR AQUI O METODO DE NOTIFICAR APOSTA client.notificarJogoEncerrado(jogo.getJogoId());
+                }else{
+                    throw new RuntimeException("Jogo ja encerrado");
                 }
 
 
