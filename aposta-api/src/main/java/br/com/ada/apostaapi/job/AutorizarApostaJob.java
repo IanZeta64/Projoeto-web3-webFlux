@@ -25,7 +25,7 @@ public class AutorizarApostaJob implements InitializingBean {
                     .subscribeOn(Schedulers.boundedElastic())
                     .map(Aposta::getApostaId)
                     .flatMap(apostaId -> service.updateStatus(String.valueOf(apostaId), "EM_ANDAMENTO") )
-                    .doOnNext(ApostaId -> log.info("Apostada validada - {}", ApostaId))
+                    .doOnNext(ApostaId -> log.info("Aposta validada - {}", ApostaId))
                     .doOnComplete(() -> log.info("Todos as apostas em PENDENTE atualizados com sucesso!"))
                     .subscribe();
         }, 1, 45 , TimeUnit.SECONDS);

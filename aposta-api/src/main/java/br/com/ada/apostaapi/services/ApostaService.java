@@ -1,22 +1,16 @@
 package br.com.ada.apostaapi.services;
 
+import br.com.ada.apostaapi.client.JogoClient;
 import br.com.ada.apostaapi.model.Aposta;
 import br.com.ada.apostaapi.model.ApostaRequest;
 import br.com.ada.apostaapi.model.Status;
 import br.com.ada.apostaapi.repositories.ApostaInMemoryRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-
-import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -25,38 +19,62 @@ import java.util.UUID;
 @Slf4j
 public class ApostaService {
     private final ApostaInMemoryRepository repository;
-    private final WebClient webClient;
-
-    private final ObjectMapper objectMapper;
+    private final JogoClient client;
 
 
-    public Mono<String> extrairElementoJson(String json, String elemento) throws JsonProcessingException {
-        JsonNode jsonNode = objectMapper.readTree(json);
-        String valor = jsonNode.get(elemento).asText();
-        return Mono.just(valor);
+    private Mono<Double> calcularCoeficiente(String id, String time) {
+        return Mono.defer(() -> client.buscarProdutoPorId(id)
+               .map(jogoDTO ->{
+                   if(!jogoDTO.status().equals(Status.ENCERRADO)) {
+                       double coeficiente;
+                       switch (jogoDTO.status()) {
+                           case NAO_INICIADO -> coeficiente = (jogoDTO.mandante().equalsIgnoreCase(time)) ? 1.25 : 1.75;
+
+                           case EM_ANDAMENTO -> {
+                               if (jogoDTO.mandante().equalsIgnoreCase(time)) {
+                                   if (jogoDTO.saldoGols() > 0) coeficiente = 1.5 - (jogoDTO.saldoGols() * 0.1);
+                                   else if (jogoDTO.saldoGols() < 0) coeficiente = jogoDTO.saldoGols() * -1.0;
+                                   else coeficiente = 1.5;
+                               } else {
+                                   if (jogoDTO.saldoGols() > 0) coeficiente = jogoDTO.saldoGols() * -1.0;
+                                   else if (jogoDTO.saldoGols() < 0) coeficiente = 1.5 - (jogoDTO.saldoGols() * 0.1);
+                                   else coeficiente = 2.0;
+                                   ;
+                               }
+                           }
+                           default -> coeficiente = 1.5;
+                       }
+                       return coeficiente;
+                   }else throw new RuntimeException("Jogo ja encerado, impossivel fazer aposta");
+                   }));
+
+
     }
-
-    @SneakyThrows
     public Mono<Aposta> save(ApostaRequest apostaRequest) {
 
-//  var jsonJogo = extrairElementoJson(webClient.get().uri( apostaRequest.jogoId()).retrieve().bodyToMono(JsonNode.class);
+        return Mono.defer(() -> calcularCoeficiente(apostaRequest.jogoId(), apostaRequest.time())
+                .map(client1 -> {
+                   var aposta = Aposta.builder()
+                        .apostaId(UUID.randomUUID())
+                        .userId(UUID.fromString(apostaRequest.userId())) //pegar da api de usuarios
+                        .jogoId(UUID.fromString(apostaRequest.jogoId())) // pegar da api de jogos
+                        .valorApostado(apostaRequest.valorAposta())
+                        .coefieciente(client1) // pegar da api de jogos
+                        .time(apostaRequest.time()) // pegar da api de joos ou transformar em enum
+                        .status(Status.NAO_INICIADO) //handler para atualizr
+                        .criacao(Instant.now())
+                        .receber(false)
+                        .build();
+                    log.info("Salvando aposta -{}", aposta);
+                   return repository.save(aposta);
+                })).subscribeOn(Schedulers.boundedElastic());
 
 
-        var aposta = Aposta.builder()
-                .apostaId(UUID.randomUUID())
-                .userId(UUID.fromString(apostaRequest.userId())) //pegar da api de usuarios
-                .jogoId(UUID.fromString(apostaRequest.jogoId())) // pegar da api de jogos
-                .valorAposta(apostaRequest.valorAposta())
-                .coefieciente(BigDecimal.valueOf(2)) // pegar da api de jogos
-                .time(apostaRequest.time()) // pegar da api de joos ou transformar em enum
-                .status(Status.NAO_INICIADO) //handler para atualizr
-                .criacao(Instant.now())
-                .receber(false)
-                .build();
-        return Mono.fromCallable(() -> {
-            log.info("Salvando aposta -{}", aposta);
-            return repository.save(aposta);
-        }).subscribeOn(Schedulers.boundedElastic());
+
+//        return Mono.fromCallable(() -> {
+//            log.info("Salvando aposta -{}", aposta);
+//            return repository.save(aposta);
+//        }).subscribeOn(Schedulers.boundedElastic());
     }
 
     public Mono<Aposta> get(String uuid) {

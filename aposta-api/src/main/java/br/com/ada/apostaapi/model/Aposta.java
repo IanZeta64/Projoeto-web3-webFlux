@@ -13,8 +13,9 @@ public class Aposta {
     private UUID apostaId;
     private UUID userId;
     private UUID jogoId;
-    private BigDecimal coefieciente;
-    private BigDecimal valorAposta;
+    private Double coefieciente;
+    private BigDecimal valorApostado;
+    private BigDecimal valorPremiacao;
     private String time;
     private Status status;
     private Instant criacao;
