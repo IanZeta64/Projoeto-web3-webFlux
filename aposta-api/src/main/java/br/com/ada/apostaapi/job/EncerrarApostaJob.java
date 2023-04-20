@@ -1,5 +1,8 @@
 package br.com.ada.apostaapi.job;
 
+import br.com.ada.apostaapi.client.JogoClient;
+import br.com.ada.apostaapi.client.dto.JogoDTO;
+import br.com.ada.apostaapi.model.Status;
 import br.com.ada.apostaapi.services.ApostaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,17 +17,20 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class AutorizarApostaJob implements InitializingBean {
+public class EncerrarApostaJob implements InitializingBean {
     private final ApostaService service;
+    private final JogoClient client;
     @Override
     public void afterPropertiesSet() throws Exception {
         var executors = Executors.newSingleThreadScheduledExecutor();
         executors.scheduleWithFixedDelay(() -> {
-            Flux.defer(() -> service.getAllByStatus("NAO_INICIADO"))
+            Flux.defer(() -> service.getAllByStatus("EM_ANDAMENTO"))
                     .subscribeOn(Schedulers.boundedElastic())
-                    .flatMap(service::authorize)
-                    .doOnNext(ApostaId -> log.info("Aposta autorizada - {}", ApostaId))
-                    .doOnComplete(() -> log.info("Todos as apostas em NAO_INICIADAS atualizados com sucesso!"))
+                    .flatMap(aposta -> client.buscarJogoPorId(String.valueOf(aposta.getJogoId()))
+                        .filter(jogo -> jogo.status().equals(Status.ENCERRADO))
+                        .flatMap(jg -> service.conclude(aposta, jg)))
+                    .doOnNext(ApostaId -> log.info("Aposta validada - {}", ApostaId))
+                    .doOnComplete(() -> log.info("Todos as apostas EM_ANDAMENTO de jogos ENCERRADOS finalizadas com sucesso!"))
                     .subscribe();
         }, 1, 45 , TimeUnit.SECONDS);
     }
