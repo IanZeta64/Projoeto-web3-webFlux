@@ -13,7 +13,7 @@ import java.util.UUID;
 public class Jogo {
 
 //    @Id
-    private UUID uuid;
+    private UUID jogoId;
     private String mandante;
     private String visitante;
     private Long golsPorMandante;

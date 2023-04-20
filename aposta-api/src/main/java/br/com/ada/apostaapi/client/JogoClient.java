@@ -1,27 +1,32 @@
-//package br.com.ada.apostaapi.client;
-//
-//import br.com.ada.apostaapi.model.Aposta;
-//import br.com.ada.apostaapi.model.ApostaRequest;
-//import com.fasterxml.jackson.core.JsonProcessingException;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.http.MediaType;
-//import org.springframework.web.reactive.function.client.WebClient;
-//import reactor.core.publisher.Mono;
-//
-//@Bean
-//public class JogoClient {
-//    private final WebClient client;
-//    private final ObjectMapper mapper;
-//
-//    public JogoClient(WebClient.Builder clientBuilder, ObjectMapper mapper) {
-//        this.client = clientBuilder
-//                .baseUrl("http://localhost:8080/jogos/")
-//                .build();
-//        this.mapper = mapper;
-//    }
-//
-//    }
-//
-//}
+package br.com.ada.apostaapi.client;
+
+import br.com.ada.apostaapi.client.dto.JogoDTO;
+import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
+
+@Component
+public class JogoClient {
+
+    private static final String PRODUTOS_API_URL = "http://localhost:8080";
+
+    private final WebClient client;
+
+    public JogoClient(WebClient.Builder builder) {
+        this.client = builder.baseUrl(PRODUTOS_API_URL).build();
+    }
+
+    public Mono<JogoDTO> buscarProdutoPorId(String jogoId) {
+        return client
+                .get()
+                .uri("/jogos/" + jogoId)
+                .exchangeToMono(result -> {
+                    if (result.statusCode().is2xxSuccessful()) {
+                        return result.bodyToMono(JogoDTO.class)
+                                .switchIfEmpty(Mono.error(new RuntimeException("Jogo inexistente!")));
+                    } else {
+                        return Mono.error(new RuntimeException("Erro na chamada"));
+                    }
+                });
+        }
+    }

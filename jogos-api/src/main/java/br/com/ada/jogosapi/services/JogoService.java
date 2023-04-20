@@ -24,7 +24,7 @@ public class JogoService {
     private final JogoInMemoryRepository repository;
     public Mono<Jogo> save(JogoRequest jogoRequest){
         var jogo = Jogo.builder()
-                .uuid(UUID.randomUUID())
+                .jogoId(UUID.randomUUID())
                 .mandante(jogoRequest.mandante())
                 .visitante(jogoRequest.visitante())
                 .golsPorMandante(0L)
