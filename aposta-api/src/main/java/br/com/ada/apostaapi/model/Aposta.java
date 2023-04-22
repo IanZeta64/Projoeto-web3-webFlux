@@ -13,13 +13,13 @@ public class Aposta {
     private UUID apostaId;
     private UUID userId;
     private UUID jogoId;
-    private Double coefieciente;
+    private Double coeficiente;
     private BigDecimal valorApostado;
     private BigDecimal valorPremiacao;
     private String timeApostado;
     private Status status;
     private Instant criacao;
     private Instant modificacao;
-    private Boolean receber;
+    private Premiacao premiacao;
 
 }
