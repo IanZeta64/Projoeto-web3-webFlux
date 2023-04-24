@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class JogoClient {
 
-    private static final String JOGOS_API_URL = "http://localhost:8080";
+    private static final String JOGOS_API_URL = "http://localhost:8081";
 
     private final WebClient client;
 
@@ -37,18 +37,18 @@ public class JogoClient {
                 }).subscribeOn(Schedulers.boundedElastic());
         }
 
-    public Flux<JogoDTO> buscarJogosEncerradosPorIds(List<String> jogosIds) {
-        return Flux.fromIterable(jogosIds) // Converter a lista de IDs em um Flux
-                .flatMap(jogoId -> client
-                        .get()
-                        .uri("/jogos/{id}", jogoId) // Utilize o ID do jogo para montar a URI de busca por ID
-                        .retrieve()
-                        .bodyToMono(JogoDTO.class)
-                        .filter(jogo -> "encerrado".equalsIgnoreCase(jogo.status().toString()))) // Filtrar apenas os jogos encerrados
-                .collectList() // Coletar os jogos encerrados em uma lista
-                .flatMapMany(Flux::fromIterable).subscribeOn(Schedulers.boundedElastic())
-                .doOnError(Throwable::getMessage);
-    }
+//    public Flux<JogoDTO> buscarJogosEncerradosPorIds(List<String> jogosIds) {
+//        return Flux.fromIterable(jogosIds) // Converter a lista de IDs em um Flux
+//                .flatMap(jogoId -> client
+//                        .get()
+//                        .uri("/jogos/{id}", jogoId) // Utilize o ID do jogo para montar a URI de busca por ID
+//                        .retrieve()
+//                        .bodyToMono(JogoDTO.class)
+//                        .filter(jogo -> "encerrado".equalsIgnoreCase(jogo.status().toString()))) // Filtrar apenas os jogos encerrados
+//                .collectList() // Coletar os jogos encerrados em uma lista
+//                .flatMapMany(Flux::fromIterable).subscribeOn(Schedulers.boundedElastic())
+//                .doOnError(Throwable::getMessage);
+//    }
 
 //    public Flux<JogoDTO> buscarJogosEncerrados() {
 //        return client

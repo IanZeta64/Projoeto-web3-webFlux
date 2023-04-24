@@ -1,4 +1,4 @@
-package br.com.ada.apostaapi.model;
+package br.com.ada.apostaapi.requests;
 
 import java.math.BigDecimal;
 

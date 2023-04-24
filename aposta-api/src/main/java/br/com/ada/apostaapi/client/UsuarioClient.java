@@ -1,7 +1,7 @@
 package br.com.ada.apostaapi.client;
 
 import br.com.ada.apostaapi.client.dto.UsuarioDTO;
-import br.com.ada.apostaapi.model.TransacaoDTO;
+import br.com.ada.apostaapi.client.dto.TransacaoDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;

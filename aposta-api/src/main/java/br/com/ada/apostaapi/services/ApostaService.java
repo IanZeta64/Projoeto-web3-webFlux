@@ -3,8 +3,13 @@ package br.com.ada.apostaapi.services;
 import br.com.ada.apostaapi.client.JogoClient;
 import br.com.ada.apostaapi.client.UsuarioClient;
 import br.com.ada.apostaapi.client.dto.JogoDTO;
+import br.com.ada.apostaapi.client.dto.TransacaoDTO;
+import br.com.ada.apostaapi.enums.Premiacao;
+import br.com.ada.apostaapi.enums.Status;
+import br.com.ada.apostaapi.enums.TipoTransacao;
 import br.com.ada.apostaapi.model.*;
-import br.com.ada.apostaapi.repositories.ApostaInMemoryRepository;
+import br.com.ada.apostaapi.requests.ApostaRequest;
+import br.com.ada.apostaapi.repositories.ApostaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +25,7 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class ApostaService {
-    private final ApostaInMemoryRepository repository;
+    private final ApostaRepository repository;
     private final JogoClient jogoClient;
     private final UsuarioClient usuarioClient;
 
@@ -59,9 +64,9 @@ public class ApostaService {
                                 .flatMap(usuarioDTO -> {
                                     if (usuarioDTO.saldo().doubleValue() >= apostaRequest.valorAposta().doubleValue()) {
                                         var aposta = Aposta.builder()
-                                                .apostaId(UUID.randomUUID())
-                                                .userId(UUID.fromString(apostaRequest.userId()))
-                                                .jogoId(UUID.fromString(apostaRequest.jogoId()))
+//                                                .apostaId(UUID.randomUUID())
+                                                .userId(apostaRequest.userId())
+                                                .jogoId(apostaRequest.jogoId())
                                                 .valorApostado(apostaRequest.valorAposta())
                                                 .valorPremiacao(apostaRequest.valorAposta().multiply(BigDecimal.valueOf(coeficiente)))
                                                 .coeficiente(coeficiente)
@@ -71,7 +76,7 @@ public class ApostaService {
                                                 .premiacao(Premiacao.INDISPONIVEL)
                                                 .build();
                                         log.info("Salvando aposta - {}", aposta);
-                                        return Mono.fromCallable(() -> repository.save(aposta))
+                                        return Mono.defer(() -> repository.save(aposta))
                                                 .flatMap(apostaSalva -> {
                                                     // Chamar outro método para retirar saldo do usuário
                                                     return usuarioClient.transacao(String.valueOf(usuarioDTO.usuarioId()), new TransacaoDTO(aposta.getValorApostado(), TipoTransacao.SAQUE))
@@ -85,23 +90,23 @@ public class ApostaService {
     }
 
 
-    public Mono<Aposta> get(String uuid) {
+    public Mono<Aposta> get(String apostaId) {
         return Mono.defer(() -> {
-            log.info("Buscando jogo - {}", uuid);
-            return Mono.justOrEmpty(repository.get(UUID.fromString(uuid)));
+            log.info("Buscando jogo - {}", apostaId);
+            return repository.findById(apostaId);
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
     public Flux<Aposta> getAll() {
         return Flux.defer(() -> {
             log.info("Buscando todos as apostas");
-            return Flux.fromIterable(repository.getAll());
+            return repository.findAll();
         }).subscribeOn(Schedulers.boundedElastic());
     }
     public Flux<Aposta> getAllByStatus(String status) {
         return Flux.defer(() -> {
             log.info("Buscando todos as Apostas - {}", status);
-            return Flux.fromIterable(repository.getAll().stream().filter(aposta -> aposta.getStatus().toString().equalsIgnoreCase(status)).toList());
+            return repository.findAll().filter(aposta -> aposta.getStatus().toString().equalsIgnoreCase(status));
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
@@ -112,8 +117,7 @@ public class ApostaService {
             log.info("Iniciando autorizacao de aposta");
             aposta.setStatus(Status.EM_ANDAMENTO);
             aposta.setModificacao(Instant.now());
-//            repository.save(aposta);
-            return Mono.justOrEmpty(aposta);
+           return repository.save(aposta);
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
@@ -125,8 +129,7 @@ public class ApostaService {
             if (aposta.getTimeApostado().equalsIgnoreCase(jogoDTO.vencedor()) && aposta.getPremiacao().equals(Premiacao.INDISPONIVEL)){
                 aposta.setPremiacao(Premiacao.DISPONIVEL);
             }
-//            repository.save(aposta);
-            return Mono.justOrEmpty(aposta);
+            return repository.save(aposta);
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
@@ -135,8 +138,8 @@ public class ApostaService {
     public Flux<Aposta> getAllByAvaliablePrize(String premiacao){
         return Flux.defer(() -> {
             log.info("Buscando todos as Apostas com premiacao - {}", premiacao);
-            return Flux.fromIterable(repository.getAll().stream()
-                    .filter(aposta -> aposta.getPremiacao().toString().equalsIgnoreCase(premiacao)).toList());
+            return repository.findAll()
+                    .filter(aposta -> aposta.getPremiacao().toString().equalsIgnoreCase(premiacao));
         }).subscribeOn(Schedulers.boundedElastic());
     }
 }

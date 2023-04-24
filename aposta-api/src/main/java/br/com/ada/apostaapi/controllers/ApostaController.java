@@ -1,6 +1,6 @@
 package br.com.ada.apostaapi.controllers;
 import br.com.ada.apostaapi.model.Aposta;
-import br.com.ada.apostaapi.model.ApostaRequest;
+import br.com.ada.apostaapi.requests.ApostaRequest;
 import br.com.ada.apostaapi.services.ApostaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
