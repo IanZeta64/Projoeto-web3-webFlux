@@ -1,4 +1,6 @@
-package br.com.ada.apostaapi.model;
+package br.com.ada.apostaapi.client.dto;
+
+import br.com.ada.apostaapi.enums.TipoTransacao;
 
 import java.math.BigDecimal;
 

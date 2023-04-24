@@ -1,8 +1,7 @@
 package br.com.ada.apostaapi.job;
 
 import br.com.ada.apostaapi.client.JogoClient;
-import br.com.ada.apostaapi.client.UsuarioClient;
-import br.com.ada.apostaapi.model.Status;
+import br.com.ada.apostaapi.enums.Status;
 import br.com.ada.apostaapi.services.ApostaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,7 @@ public class EncerrarApostaJob implements InitializingBean {
         executors.scheduleWithFixedDelay(() -> {
             Flux.defer(() -> service.getAllByStatus("EM_ANDAMENTO"))
                     .subscribeOn(Schedulers.boundedElastic())
-                    .flatMap(aposta -> jogoClient.buscarJogoPorId(String.valueOf(aposta.getJogoId()))
+                    .flatMap(aposta -> jogoClient.buscarJogoPorId(aposta.getJogoId())
                         .filter(jogo -> jogo.status().equals(Status.ENCERRADO))
                         .flatMap(jg -> service.conclude(aposta, jg)))
                     .doOnNext(ApostaId -> log.info("Aposta validada - {}", ApostaId))
