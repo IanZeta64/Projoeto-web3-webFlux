@@ -1,4 +1,6 @@
-package br.com.ada.usuarioapi.model;
+package br.com.ada.usuarioapi.domain;
+
+import br.com.ada.usuarioapi.enums.TipoTransacao;
 
 import java.math.BigDecimal;
 

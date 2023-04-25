@@ -2,15 +2,21 @@ package br.com.ada.apostaapi.services;
 
 import br.com.ada.apostaapi.client.JogoClient;
 import br.com.ada.apostaapi.client.UsuarioClient;
+import br.com.ada.apostaapi.client.dto.ApostaAuxDTO;
 import br.com.ada.apostaapi.client.dto.JogoDTO;
 import br.com.ada.apostaapi.client.dto.TransacaoDTO;
 import br.com.ada.apostaapi.enums.Premiacao;
 import br.com.ada.apostaapi.enums.Status;
 import br.com.ada.apostaapi.enums.TipoTransacao;
+import br.com.ada.apostaapi.exceptions.FnishedGameException;
+import br.com.ada.apostaapi.exceptions.InvalidTeamException;
+import br.com.ada.apostaapi.exceptions.UnauthorizedBalanceTransactionException;
 import br.com.ada.apostaapi.model.*;
 import br.com.ada.apostaapi.requests.ApostaRequest;
 import br.com.ada.apostaapi.repositories.ApostaRepository;
+import br.com.ada.apostaapi.responses.ApostaResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -19,7 +25,6 @@ import reactor.core.scheduler.Schedulers;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -30,7 +35,7 @@ public class ApostaService {
     private final UsuarioClient usuarioClient;
 
 
-    private Mono<Double> calcularCoeficiente(String id, String time) {
+    private Mono<ApostaAuxDTO> calcularCoeficiente(String id, String time) {
         return Mono.defer(() -> jogoClient.buscarJogoPorId(id)
                .map(jogoDTO ->{
                    if(!jogoDTO.status().equals(Status.ENCERRADO)) {
@@ -52,55 +57,54 @@ public class ApostaService {
                            }
                            default -> coeficiente = 1.5;
                        }
-                       return coeficiente;
-                   }else throw new RuntimeException("Jogo ja encerado, impossivel fazer aposta");
+                       return new ApostaAuxDTO(coeficiente, jogoDTO.mandante(), jogoDTO.visitante());
+                   }else throw new FnishedGameException("Jogo ja encerado, impossivel fazer aposta");
                    }));
-
-
     }
-    public Mono<Aposta> save(ApostaRequest apostaRequest) {
-        return Mono.defer(() -> calcularCoeficiente(apostaRequest.jogoId(), apostaRequest.time())
-                        .flatMap(coeficiente -> usuarioClient.buscarUsuarioPorId(apostaRequest.userId())
+
+    public Mono<ApostaResponse> save(ApostaRequest apostaRequest) {
+        return Mono.defer(() -> calcularCoeficiente(apostaRequest.jogoId(), apostaRequest.timeApostado())
+                        .flatMap(apostaAuxDTO -> usuarioClient.buscarUsuarioPorId(apostaRequest.userId())
                                 .flatMap(usuarioDTO -> {
                                     if (usuarioDTO.saldo().doubleValue() >= apostaRequest.valorAposta().doubleValue()) {
-                                        var aposta = Aposta.builder()
-//                                                .apostaId(UUID.randomUUID())
-                                                .userId(apostaRequest.userId())
-                                                .jogoId(apostaRequest.jogoId())
-                                                .valorApostado(apostaRequest.valorAposta())
-                                                .valorPremiacao(apostaRequest.valorAposta().multiply(BigDecimal.valueOf(coeficiente)))
-                                                .coeficiente(coeficiente)
-                                                .timeApostado(apostaRequest.time())
-                                                .status(Status.NAO_INICIADO)
-                                                .criacao(Instant.now())
-                                                .premiacao(Premiacao.INDISPONIVEL)
-                                                .build();
-                                        log.info("Salvando aposta - {}", aposta);
-                                        return Mono.defer(() -> repository.save(aposta))
-                                                .flatMap(apostaSalva -> {
-                                                    // Chamar outro método para retirar saldo do usuário
-                                                    return usuarioClient.transacao(String.valueOf(usuarioDTO.usuarioId()), new TransacaoDTO(aposta.getValorApostado(), TipoTransacao.SAQUE))
-                                                            .thenReturn(apostaSalva);
-                                                });
+                                        if(apostaRequest.timeApostado().equalsIgnoreCase(apostaAuxDTO.mandante()) || apostaRequest.timeApostado().equalsIgnoreCase(apostaAuxDTO.visitante())) {
+                                            var aposta = Aposta.builder()
+                                                    .usuarioId(apostaRequest.userId())
+                                                    .jogoId(apostaRequest.jogoId())
+                                                    .valorApostado(apostaRequest.valorAposta())
+                                                    .valorPremiacao(apostaRequest.valorAposta().multiply(BigDecimal.valueOf(apostaAuxDTO.coeficiente())))
+                                                    .coeficiente(apostaAuxDTO.coeficiente())
+                                                    .timeApostado(apostaRequest.timeApostado())
+                                                    .status(Status.NAO_INICIADO)
+                                                    .criacao(Instant.now())
+                                                    .premiacao(Premiacao.INDISPONIVEL)
+                                                    .build();
+                                            log.info("Salvando aposta - {}", aposta);
+                                            return Mono.defer(() -> repository.save(aposta).map(Aposta::toResponse))
+                                                    .flatMap(apostaSalva -> usuarioClient.transacao(String.valueOf(usuarioDTO.usuarioId()), new TransacaoDTO(aposta.getValorApostado(), TipoTransacao.SAQUE))
+                                                            .thenReturn(apostaSalva));
+                                        }else {
+                                            return Mono.error(new InvalidTeamException("Time invalido para aposta."));
+                                        }
                                     } else {
-                                        return Mono.error(new RuntimeException("Saldo insuficiente para aposta."));//ATENCAO
+                                        return Mono.error( new UnauthorizedBalanceTransactionException("Saldo insuficiente para aposta"));
                                     }
                                 })))
                 .subscribeOn(Schedulers.boundedElastic());
     }
 
 
-    public Mono<Aposta> get(String apostaId) {
+    public Mono<ApostaResponse> get(String apostaId) {
         return Mono.defer(() -> {
             log.info("Buscando jogo - {}", apostaId);
-            return repository.findById(apostaId);
+            return repository.findById(apostaId).map(Aposta::toResponse);
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Flux<Aposta> getAll() {
+    public Flux<ApostaResponse> getAll() {
         return Flux.defer(() -> {
             log.info("Buscando todos as apostas");
-            return repository.findAll();
+            return repository.findAll().map(Aposta::toResponse);
         }).subscribeOn(Schedulers.boundedElastic());
     }
     public Flux<Aposta> getAllByStatus(String status) {

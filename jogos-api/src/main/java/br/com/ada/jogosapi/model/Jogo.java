@@ -1,5 +1,6 @@
 package br.com.ada.jogosapi.model;
 
+import br.com.ada.jogosapi.responses.JogoResponse;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -37,5 +38,9 @@ public class Jogo {
     @Field("vencedor")
     private String vencedor;
 
+    public JogoResponse toResponse(){
+        return  new JogoResponse(this.jogoId, this.mandante, this.visitante, this.golsPorMandante, this.golsPorVisitante, this.status,
+                this.dataHoraJogo, this.vencedor);
+    }
 }
 

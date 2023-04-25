@@ -31,9 +31,9 @@ public class DepositarPremiacaoJob implements InitializingBean {
             Flux.defer(() -> service.getAllByAvaliablePrize("DISPONIVEL"))
                     .subscribeOn(Schedulers.boundedElastic())
                     .flatMap(aposta -> {
-                        aposta.setPremiacao(Premiacao.RESGADATA);
+                        aposta.setPremiacao(Premiacao.RESGATADA);
                         return repository.save(aposta).flatMap( apt ->
-                                usuarioClient.transacao(aposta.getUserId(),
+                                usuarioClient.transacao(aposta.getUsuarioId(),
                                                 new TransacaoDTO(aposta.getValorPremiacao(), TipoTransacao.DEPOSITO))
                                         .thenReturn(apt));
                     })
