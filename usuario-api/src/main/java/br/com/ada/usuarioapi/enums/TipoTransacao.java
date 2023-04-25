@@ -1,4 +1,4 @@
-package br.com.ada.usuarioapi.model;
+package br.com.ada.usuarioapi.enums;
 
 public enum TipoTransacao {
     SAQUE, DEPOSITO;

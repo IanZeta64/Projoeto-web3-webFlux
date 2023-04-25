@@ -3,6 +3,7 @@ import br.com.ada.jogosapi.model.Jogo;
 import br.com.ada.jogosapi.model.Status;
 import br.com.ada.jogosapi.repositories.JogoRepository;
 import br.com.ada.jogosapi.requests.JogoRequest;
+import br.com.ada.jogosapi.responses.JogoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 public class JogoService {
     private final JogoRepository repository;
 
-    public Mono<Jogo> save(JogoRequest jogoRequest){
+    public Mono<JogoResponse> save(JogoRequest jogoRequest){
         return Mono.defer(() ->{
             var jogo = Jogo.builder()
 //                .jogoId(UUID.randomUUID())
@@ -33,30 +34,30 @@ public class JogoService {
                     .status(Status.NAO_INICIADO)
                     .build();
             log.info("Salvando jogo -{}", jogo);
-            return repository.save(jogo);
+            return repository.save(jogo).map(Jogo::toResponse);
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Mono<Jogo> get(String jogoId){
+    public Mono<JogoResponse> get(String jogoId){
         return Mono.defer( () -> {
             log.info("Buscando jogo pelo id - {}", jogoId);
-            return repository.findById(jogoId);
+            return repository.findById(jogoId).map(Jogo::toResponse);
         }).subscribeOn(Schedulers.boundedElastic());
     }
-    public Flux<Jogo> getAll(){
+    public Flux<JogoResponse> getAll(){
         return Flux.defer( () -> {
             log.info("Buscando todos os jogos");
-            return repository.findAll();
+            return repository.findAll().map(Jogo::toResponse);
         }).subscribeOn(Schedulers.boundedElastic());
     }
-    public Flux<Jogo> getAllPerStatus(String status){
+    public Flux<JogoResponse> getAllPerStatus(String status){
         return Flux.defer( () -> {
             log.info("Buscando todos os jogos");
-            return repository.findAll().filter(jogo -> jogo.getStatus().toString().equalsIgnoreCase(status));
+            return repository.findAll().filter(jogo -> jogo.getStatus().toString().equalsIgnoreCase(status)).map(Jogo::toResponse);
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Mono<Jogo> scoreGoal(String jogoId, String time){
+    public Mono<JogoResponse> scoreGoal(String jogoId, String time){
         return Mono.defer(() -> {
             log.info("Iniciando alteracao de placar");
             return repository.findById(jogoId).flatMap(
@@ -72,12 +73,12 @@ public class JogoService {
                        }else{
                            return Mono.error(new RuntimeException("Jogo encerrado ou nao iniciado"));
                        }
-                        return repository.save(jogo);
+                        return repository.save(jogo).map(Jogo::toResponse);
                     });
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Mono<Jogo> updateStatus(String jogoId, String status){
+    public Mono<JogoResponse> updateStatus(String jogoId, String status){
         return Mono.defer(() -> {
             log.info("Iniciando atualizacao de status");
             return repository.findById(jogoId).flatMap(
@@ -99,13 +100,13 @@ public class JogoService {
                 }else{
                     return Mono.error(new RuntimeException("Jogo ja encerrado"));
                 }
-                return repository.save(jogo);
+                return repository.save(jogo).map(Jogo::toResponse);
                     });
 
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Mono<Jogo> update(JogoRequest jogoRequest, String jogoId) {
+    public Mono<JogoResponse> update(JogoRequest jogoRequest, String jogoId) {
         return Mono.defer(() ->{
             log.info("Atualizando jogo -{}", jogoRequest);
             return repository.findById(jogoId).flatMap(
@@ -113,7 +114,7 @@ public class JogoService {
                jogo.setMandante(jogoRequest.mandante());
                jogo.setVisitante(jogoRequest.visitante());
                jogo.setDataHoraJogo(LocalDateTime.parse(jogoRequest.dataHoraJogo(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-               return repository.save(jogo);
+               return repository.save(jogo).map(Jogo::toResponse);
                     });
 
         }).subscribeOn(Schedulers.boundedElastic());

@@ -1,10 +1,11 @@
 package br.com.ada.usuarioapi.services;
 
-import br.com.ada.usuarioapi.model.TipoTransacao;
-import br.com.ada.usuarioapi.model.Transacao;
+import br.com.ada.usuarioapi.enums.TipoTransacao;
+import br.com.ada.usuarioapi.domain.Transacao;
 import br.com.ada.usuarioapi.model.Usuario;
-import br.com.ada.usuarioapi.model.UsuarioRequest;
+import br.com.ada.usuarioapi.requests.UsuarioRequest;
 import br.com.ada.usuarioapi.repositories.UsarioReactiveRepository;
+import br.com.ada.usuarioapi.responses.UsuarioResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -21,35 +21,38 @@ import java.util.UUID;
 public class UsuarioService {
     private final UsarioReactiveRepository repository;
 
-    public Mono<Usuario> save(UsuarioRequest usuarioRequest){
+
+
+    public Mono<UsuarioResponse> save(UsuarioRequest usuarioRequest){
         return Mono.defer(() -> {
             var usuario = Usuario.builder()
-//                    .usuarioId(UUID.randomUUID())
                     .documento(usuarioRequest.documento())
+                    .email(usuarioRequest.email())
                     .nome(usuarioRequest.nome())
+                    .senha(usuarioRequest.senha())
                     .saldo(BigDecimal.TEN)
                     .build();
             log.info("Salvando usuario - {}", usuario);
-            return repository.save(usuario);
+            return repository.save(usuario).map(Usuario::toResponse);
         }).subscribeOn(Schedulers.boundedElastic());
 
     }
 
-    public Mono<Usuario> get(String usuarioId){
+    public Mono<UsuarioResponse> get(String usuarioId){
         return Mono.defer(() -> {
             log.info("Buscando usuario pelo id - {}", usuarioId);
-            return repository.findById(usuarioId);
+            return repository.findById(usuarioId).map(Usuario::toResponse);
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Flux<Usuario> getAll(){
+    public Flux<UsuarioResponse> getAll(){
         return Flux.defer(() -> {
             log.info("Buscando todos os usuarios");
-            return repository.findAll();
+            return repository.findAll().map(Usuario::toResponse);
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
-    public Mono<Usuario> valueTransaction(String usuarioId, Transacao transacao){
+    public Mono<UsuarioResponse> valueTransaction(String usuarioId, Transacao transacao){
         return Mono.defer( () -> {
             log.info("Buscando usuario pelo id - {}", usuarioId);
             return repository.findById(usuarioId)
@@ -67,32 +70,9 @@ public class UsuarioService {
                 }else {
                     throw new RuntimeException("Tipo de transacao invalida.");
                 }
-                        return repository.save(user);
+                        return repository.save(user).map(Usuario::toResponse);
                     });
         }).subscribeOn(Schedulers.boundedElastic());
     }
-
-//    public Mono<Usuario> valueTransaction(String usuarioId, Transacao transacao){
-//        return Mono.defer( () -> {
-//            log.info("Buscando usuario pelo id - {}", usuarioId);
-//            var usuarioOptional = repository.get(UUID.fromString(usuarioId));
-//            usuarioOptional.ifPresent(user ->{
-//                if (transacao.tipoTransacao().equals(TipoTransacao.SAQUE)) {
-//                    if (user.getSaldo().doubleValue() >= transacao.valorTransacao().doubleValue()) {
-//                        user.setSaldo(user.getSaldo().subtract(transacao.valorTransacao()));
-//                        log.info("Sacando valor de usuario - {}", usuarioId);
-//                    } else {
-//                        throw new RuntimeException("Saldo insuficiente");
-//                    }
-//                } else if (transacao.tipoTransacao().equals(TipoTransacao.DEPOSITO)) {
-//                    user.setSaldo(user.getSaldo().add(transacao.valorTransacao()));
-//                    log.info("Depositando valor de usuario - {}", usuarioId);
-//                }else {
-//                    throw new RuntimeException("Tipo de transacao invalida.");
-//                }
-//            });
-//            return  Mono.justOrEmpty(usuarioOptional);
-//        }).subscribeOn(Schedulers.boundedElastic());
-//    }
 
 }
