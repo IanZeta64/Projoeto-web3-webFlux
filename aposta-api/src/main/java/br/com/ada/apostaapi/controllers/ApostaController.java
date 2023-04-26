@@ -1,10 +1,8 @@
 package br.com.ada.apostaapi.controllers;
-import br.com.ada.apostaapi.exceptions.SaveBetException;
 import br.com.ada.apostaapi.requests.ApostaRequest;
 import br.com.ada.apostaapi.responses.ApostaResponse;
 import br.com.ada.apostaapi.services.ApostaService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +36,13 @@ public class ApostaController {
     @GetMapping
     public Mono<ResponseEntity<Flux<ApostaResponse>>> getTodasAposta(){
         return Flux.defer(service::getAll).subscribeOn(Schedulers.parallel()).collectList()
+                .map(apostasResponse -> ResponseEntity.ok().body(Flux.fromIterable(apostasResponse)))
+                .doOnError(err -> log.error("Error ao buscar apostas - {}", err.getMessage()))
+                .doOnNext(it -> log.info("Apostas recuperado com sucesso - {}", it));
+    }
+    @GetMapping(params = "status")
+    public Mono<ResponseEntity<Flux<ApostaResponse>>> getTodasApostaPorStatus(@RequestParam("status")String status){
+        return Flux.defer(() -> service.getAllByStatus(status)).subscribeOn(Schedulers.parallel()).collectList()
                 .map(apostasResponse -> ResponseEntity.ok().body(Flux.fromIterable(apostasResponse)))
                 .doOnError(err -> log.error("Error ao buscar apostas - {}", err.getMessage()))
                 .doOnNext(it -> log.info("Apostas recuperado com sucesso - {}", it));

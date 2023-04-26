@@ -5,18 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1c4b6570-df2e-47fa-8d8f-4fcff8385822" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/BetNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/exceptions/ExceptionHandlerControllerAdvice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/exceptions/GameNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/exceptions/UnavaliableGameException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/exceptions/DuplicatedUserException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/exceptions/ExceptionHandlerControllerAdvice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/exceptions/UnauthorizedBalanceTransactionException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/exceptions/UserNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/controllers/ApostaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/controllers/ApostaController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/ExceptionHandlerControllerAdvice.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/ExceptionHandlerControllerAdvice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/SaveBetException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/job/AutorizarApostaJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/job/AutorizarApostaJob.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/job/EncerrarApostaJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/job/EncerrarApostaJob.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/repositories/ApostaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/repositories/ApostaRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/services/ApostaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/services/ApostaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/repositories/JogoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/repositories/JogoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/services/JogoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/services/JogoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/model/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/repositories/UsarioReactiveRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/repositories/UsarioReactiveRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/responses/UsuarioResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/responses/UsuarioResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/services/UsuarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/services/UsuarioService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -44,14 +67,23 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "last_directory_selection": "C:/Users/Ian Paschoal/Documents/GitHub/Projoeto-web3-webFlux/usuario-api/src/main/java/br/com/ada/usuarioapi/exceptions",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "spring.configuration.checksum": "063c0b41a068d545afc0f2b3e5cbf597",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="br.com.ada.usuarioapi.exceptions" />
+    </key>
+  </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
@@ -59,7 +91,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.ApostaApiApplication">
+  <component name="RunManager" selected="Spring Boot.JogosApiApplication">
     <configuration name="ApostaApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="aposta-api" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="br.com.ada.apostaapi.ApostaApiApplication" />
@@ -97,7 +129,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1682451815909</updated>
-      <workItem from="1682451817095" duration="2816000" />
+      <workItem from="1682451817095" duration="3286000" />
+      <workItem from="1682523625707" duration="5745000" />
     </task>
     <servers />
   </component>

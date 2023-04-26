@@ -1,8 +1,7 @@
 package br.com.ada.usuarioapi.model;
 
 import br.com.ada.usuarioapi.responses.UsuarioResponse;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -28,8 +27,8 @@ public class Usuario {
     @Field("balance")
     private BigDecimal saldo;
 
-    public UsuarioResponse toResponse(){
-        return new UsuarioResponse(this.usuarioId, this.email, this.nome, this.documento, this.saldo);
+    public UsuarioResponse toResponse() {
+        return new UsuarioResponse(this.usuarioId, this.email, this.nome, this.saldo);
     }
 
 
