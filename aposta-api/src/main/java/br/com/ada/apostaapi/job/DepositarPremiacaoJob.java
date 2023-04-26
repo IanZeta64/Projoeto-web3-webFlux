@@ -1,10 +1,8 @@
 package br.com.ada.apostaapi.job;
 
 import br.com.ada.apostaapi.client.UsuarioClient;
-import br.com.ada.apostaapi.enums.Premiacao;
 import br.com.ada.apostaapi.enums.TipoTransacao;
 import br.com.ada.apostaapi.client.dto.TransacaoDTO;
-import br.com.ada.apostaapi.repositories.ApostaRepository;
 import br.com.ada.apostaapi.services.ApostaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +20,6 @@ import java.util.concurrent.TimeUnit;
 public class DepositarPremiacaoJob implements InitializingBean {
     private final ApostaService service;
     private final UsuarioClient usuarioClient;
-    private final ApostaRepository repository;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -30,13 +27,10 @@ public class DepositarPremiacaoJob implements InitializingBean {
         executors.scheduleWithFixedDelay(() -> {
             Flux.defer(() -> service.getAllByAvaliablePrize("DISPONIVEL"))
                     .subscribeOn(Schedulers.boundedElastic())
-                    .flatMap(aposta -> {
-                        aposta.setPremiacao(Premiacao.RESGATADA);
-                        return repository.save(aposta).flatMap( apt ->
-                                usuarioClient.transacao(aposta.getUsuarioId(),
-                                                new TransacaoDTO(aposta.getValorPremiacao(), TipoTransacao.DEPOSITO))
-                                        .thenReturn(apt));
-                    })
+                    .flatMap(aposta -> service.setPrizeRegatada(aposta).flatMap(apt ->
+                             usuarioClient.transacao(aposta.getUsuarioId(),
+                                             new TransacaoDTO(aposta.getValorPremiacao(), TipoTransacao.DEPOSITO))
+                                     .thenReturn(apt)))
 
                     .doOnNext(ApostaId -> log.info("Premiacão depositada com sucesso - {}", ApostaId))
                     .doOnComplete(() -> log.info("Todas as premiacões DISPONIVEIS depositadas con sucesso"))

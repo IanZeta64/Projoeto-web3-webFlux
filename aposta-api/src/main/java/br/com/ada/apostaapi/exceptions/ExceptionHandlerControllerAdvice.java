@@ -1,22 +1,16 @@
 package br.com.ada.apostaapi.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.reactive.result.method.annotation.ResponseEntityExceptionHandler;
-
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @ControllerAdvice
 public class ExceptionHandlerControllerAdvice extends ResponseEntityExceptionHandler {
 
 
-    @ExceptionHandler(FnishedGameException.class)
-    public ResponseEntity<Object> handleFnishedGameException(FnishedGameException ex) {
+    @ExceptionHandler(FinishedGameException.class)
+    public ResponseEntity<Object> handleFnishedGameException(FinishedGameException ex) {
         String errorMessage = ex.getMessage();
         HttpStatus httpStatus = HttpStatus.FORBIDDEN;
         return new ResponseEntity<>(errorMessage, httpStatus);
@@ -39,6 +33,18 @@ public class ExceptionHandlerControllerAdvice extends ResponseEntityExceptionHan
     public ResponseEntity<Object> handleBetNotFoundException(BetNotFoundException ex) {
         String errorMessage = ex.getMessage();
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(errorMessage, httpStatus);
+    }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
+        String errorMessage = ex.getMessage();
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(errorMessage, httpStatus);
+    }
+    @ExceptionHandler(ClientErrorException.class)
+    public ResponseEntity<Object> handleClientErrorException(ClientErrorException ex) {
+        String errorMessage = ex.getMessage();
+        HttpStatus httpStatus = HttpStatus.FORBIDDEN;
         return new ResponseEntity<>(errorMessage, httpStatus);
     }
 }

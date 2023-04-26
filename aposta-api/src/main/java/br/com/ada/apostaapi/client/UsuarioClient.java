@@ -2,6 +2,8 @@ package br.com.ada.apostaapi.client;
 
 import br.com.ada.apostaapi.client.dto.UsuarioDTO;
 import br.com.ada.apostaapi.client.dto.TransacaoDTO;
+import br.com.ada.apostaapi.exceptions.ClientErrorException;
+import br.com.ada.apostaapi.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -23,9 +25,9 @@ public class UsuarioClient {
                 .exchangeToMono(result -> {
                     if (result.statusCode().is2xxSuccessful()) {
                         return result.bodyToMono(UsuarioDTO.class)
-                                .switchIfEmpty(Mono.error(new RuntimeException("Usuario inexistente!")));
+                                .switchIfEmpty(Mono.error(new UserNotFoundException("Usuario inexistente!")));
                     } else {
-                        return Mono.error(new RuntimeException("Erro na chamada"));
+                        return Mono.error(new ClientErrorException("Erro na chamada"));
                     }
                 });
     }
@@ -38,9 +40,9 @@ public class UsuarioClient {
                 .exchangeToMono(result -> {
                     if (result.statusCode().is2xxSuccessful()) {
                         return result.bodyToMono(TransacaoDTO.class)
-                                .switchIfEmpty(Mono.error(new RuntimeException("Usuario inexistente!")));
+                                .switchIfEmpty(Mono.error(new UserNotFoundException("Usuario inexistente!")));
                     } else {
-                        return Mono.error(new RuntimeException("Erro na chamada"));
+                        return Mono.error(new ClientErrorException("Erro na chamada, verifique os dados inseidos"));
                     }
                 });
     }
