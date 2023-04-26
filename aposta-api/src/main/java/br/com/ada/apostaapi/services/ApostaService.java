@@ -8,6 +8,7 @@ import br.com.ada.apostaapi.client.dto.TransacaoDTO;
 import br.com.ada.apostaapi.enums.Premiacao;
 import br.com.ada.apostaapi.enums.Status;
 import br.com.ada.apostaapi.enums.TipoTransacao;
+import br.com.ada.apostaapi.exceptions.BetNotFoundException;
 import br.com.ada.apostaapi.exceptions.FnishedGameException;
 import br.com.ada.apostaapi.exceptions.InvalidTeamException;
 import br.com.ada.apostaapi.exceptions.UnauthorizedBalanceTransactionException;
@@ -16,7 +17,6 @@ import br.com.ada.apostaapi.requests.ApostaRequest;
 import br.com.ada.apostaapi.repositories.ApostaRepository;
 import br.com.ada.apostaapi.responses.ApostaResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -97,24 +97,38 @@ public class ApostaService {
         return Mono.defer(() -> {
             log.info("Buscando jogo - {}", apostaId);
             return repository.findById(apostaId).map(Aposta::toResponse);
-        }).subscribeOn(Schedulers.boundedElastic());
+        }).switchIfEmpty(Mono.error(new BetNotFoundException("Aposta nao encontrada com o id informado")))
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     public Flux<ApostaResponse> getAll() {
         return Flux.defer(() -> {
             log.info("Buscando todos as apostas");
             return repository.findAll().map(Aposta::toResponse);
-        }).subscribeOn(Schedulers.boundedElastic());
+        }).switchIfEmpty(Flux.error(new BetNotFoundException("Nenhuma aposta encontrada")))
+                .subscribeOn(Schedulers.boundedElastic());
     }
-    public Flux<Aposta> getAllByStatus(String status) {
+    public Flux<Aposta> getAllByStatusJob(String status) {
         return Flux.defer(() -> {
             log.info("Buscando todos as Apostas - {}", status);
             return repository.findAll().filter(aposta -> aposta.getStatus().toString().equalsIgnoreCase(status));
-        }).subscribeOn(Schedulers.boundedElastic());
+        })
+        .subscribeOn(Schedulers.boundedElastic());
+    }
+    public Flux<ApostaResponse> getAllByStatus(String status) {
+        return Flux.defer(() -> {
+                    log.info("Buscando todos as Apostas - {}", status);
+                    return repository.findAll().filter(aposta -> aposta.getStatus().toString().equalsIgnoreCase(status))
+                            .map(Aposta::toResponse);
+                })
+                .switchIfEmpty(Flux.error(new BetNotFoundException("Nenhuma aposta encontrada com o status informado")))
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
 
-    public Mono<Aposta> authorize(Aposta aposta) {
+
+
+        public Mono<Aposta> authorize(Aposta aposta) {
 
         return Mono.defer(() -> {
             log.info("Iniciando autorizacao de aposta");

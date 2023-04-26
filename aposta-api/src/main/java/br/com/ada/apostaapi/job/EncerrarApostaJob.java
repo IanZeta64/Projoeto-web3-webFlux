@@ -24,7 +24,7 @@ public class EncerrarApostaJob implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         var executors = Executors.newSingleThreadScheduledExecutor();
         executors.scheduleWithFixedDelay(() -> {
-            Flux.defer(() -> service.getAllByStatus("EM_ANDAMENTO"))
+            Flux.defer(() -> service.getAllByStatusJob("EM_ANDAMENTO"))
                     .subscribeOn(Schedulers.boundedElastic())
                     .flatMap(aposta -> jogoClient.buscarJogoPorId(aposta.getJogoId())
                         .filter(jogo -> jogo.status().equals(Status.ENCERRADO))

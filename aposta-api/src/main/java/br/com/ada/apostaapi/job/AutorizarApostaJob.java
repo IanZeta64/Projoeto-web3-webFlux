@@ -19,7 +19,7 @@ public class AutorizarApostaJob implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         var executors = Executors.newSingleThreadScheduledExecutor();
         executors.scheduleWithFixedDelay(() -> {
-            Flux.defer(() -> service.getAllByStatus("NAO_INICIADO"))
+            Flux.defer(() -> service.getAllByStatusJob("NAO_INICIADO"))
                     .subscribeOn(Schedulers.boundedElastic())
                     .flatMap(service::authorize)
                     .doOnNext(ApostaId -> log.info("Aposta autorizada - {}", ApostaId))
