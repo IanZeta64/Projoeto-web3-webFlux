@@ -5,6 +5,8 @@
       <list>
         <option value="$PROJECT_DIR$/jogos-api/pom.xml" />
         <option value="$PROJECT_DIR$/aposta-api/pom.xml" />
+        <option value="$PROJECT_DIR$/gateway-api/pom.xml" />
+        <option value="$PROJECT_DIR$/usuario-api/pom.xml" />
       </list>
     </option>
   </component>
