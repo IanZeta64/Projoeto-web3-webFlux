@@ -83,12 +83,11 @@ public class ApostaService {
                                             return Mono.defer(() -> repository.save(aposta).map(Aposta::toResponse))
                                                     .flatMap(apostaSalva -> usuarioClient.transacao(String.valueOf(usuarioDTO.usuarioId()), new TransacaoDTO(aposta.getValorApostado(), TipoTransacao.SAQUE))
                                                             .thenReturn(apostaSalva));
-                                        }else {
-                                            return Mono.error(new InvalidTeamException("Time invalido para aposta."));
-                                        }
-                                    } else {
-                                        return Mono.error( new UnauthorizedBalanceTransactionException("Saldo insuficiente para aposta"));
-                                    }
+                                        }else return Mono.error(new InvalidTeamException("Time invalido para aposta"));
+
+                                    } else
+                                        return Mono.error(new UnauthorizedBalanceTransactionException("Saldo insuficiente para aposta"));
+
                                 })))
                 .subscribeOn(Schedulers.boundedElastic());
     }

@@ -17,9 +17,22 @@ public class ExceptionHandlerControllerAdvice extends ResponseEntityExceptionHan
 
 
     @ExceptionHandler(FnishedGameException.class)
-    public ResponseEntity<Object> handleCategoryNotFoundException(FnishedGameException ex) {
+    public ResponseEntity<Object> handleFnishedGameException(FnishedGameException ex) {
         String errorMessage = ex.getMessage();
-        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        HttpStatus httpStatus = HttpStatus.FORBIDDEN;
+        return new ResponseEntity<>(errorMessage, httpStatus);
+    }
+
+    @ExceptionHandler(InvalidTeamException.class)
+    public ResponseEntity<Object> handleInvalidTeamException(InvalidTeamException ex) {
+        String errorMessage = ex.getMessage();
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(errorMessage, httpStatus);
+    }
+    @ExceptionHandler(UnauthorizedBalanceTransactionException.class)
+    public ResponseEntity<Object> handleUnauthorizedBalanceTransactionException(UnauthorizedBalanceTransactionException ex) {
+        String errorMessage = ex.getMessage();
+        HttpStatus httpStatus = HttpStatus.FORBIDDEN;
         return new ResponseEntity<>(errorMessage, httpStatus);
     }
 
