@@ -8,9 +8,9 @@ Implementar uma API REST de qualquer assunto utilizando a arquitetura de micross
 A entrega deve ser feita através do GITHUB enviando o link do repositório aqui. Lembre-se de deixar o repositório público.
 
 > Microservicos: 
--jogos: criar, atualizar, buscar, deletar e alterar placar e status do jogo.
--usuario: criar, atualizar, deletar, buscar e alterar saldo de usuario.
--aposta: criar e buscar aposta baseado nos jogos e usuario.
+-jogos: criar, atualizar, buscar, alterar placar e status e deletar jogo.
+-usuario: criar, atualizar, buscar, alterar saldo e deletar usuario.
+-aposta: criar, buscar e deletar aposta baseado nos jogos e usuarios existentes.
  
 > Funcionalidade de integracao dos microsservicos: 
 -registrar aposta para usuarios existentes e com saldo maior que o valor apostado.
