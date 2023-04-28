@@ -25,7 +25,7 @@ A entrega deve ser feita através do GITHUB enviando o link do repositório aqui
 
 >Principais ferramentas e dependencias:
 -Spring webflux
--Mongodb reativo
+-Mongodb Atlas reativo
 -spring cloud eureka server
 -spring cloud gateway
 -spring circuit breaker
