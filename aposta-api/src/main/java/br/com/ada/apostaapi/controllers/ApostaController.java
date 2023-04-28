@@ -4,6 +4,7 @@ import br.com.ada.apostaapi.responses.ApostaResponse;
 import br.com.ada.apostaapi.services.ApostaService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -46,5 +47,14 @@ public class ApostaController {
                 .map(apostasResponse -> ResponseEntity.ok().body(Flux.fromIterable(apostasResponse)))
                 .doOnError(err -> log.error("Error ao buscar apostas - {}", err.getMessage()))
                 .doOnNext(it -> log.info("Apostas recuperado com sucesso - {}", it));
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public Mono<ResponseEntity<Mono<Void>>> deletar(@PathVariable("id") String apostaId){
+        return Mono.defer(() -> service.delete(apostaId).subscribeOn(Schedulers.parallel())
+                .map(apostasResponse -> ResponseEntity.ok(Mono.just(apostasResponse)))
+                .doOnError(err -> log.error("Error ao deletar aposta - {}", err.getMessage()))
+                .doOnNext(it -> log.info("Aposta deletada com sucesso - {}", it)));
     }
 }
