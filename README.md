@@ -21,7 +21,7 @@ A entrega deve ser feita através do GITHUB enviando o link do repositório aqui
 > Funcionalidades Cloud:
 -eureka: registro de server pelo eureka
 -gateway: mascara de para os microservicos
--circuitbreaker: fallback para metoods do client
+-circuitbreaker: fallback para metodos do client
 
 >Principais ferramentas e dependencias:
 -Spring webflux
