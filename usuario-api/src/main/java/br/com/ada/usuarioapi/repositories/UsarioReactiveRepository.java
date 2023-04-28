@@ -9,4 +9,5 @@ import reactor.core.publisher.Mono;
 public interface UsarioReactiveRepository extends ReactiveMongoRepository<Usuario, String> {
 
     Mono<Boolean> existsByDocumento(String Documento);
+    Mono<Boolean> existsByUsuarioId(String usuarioId);
 }

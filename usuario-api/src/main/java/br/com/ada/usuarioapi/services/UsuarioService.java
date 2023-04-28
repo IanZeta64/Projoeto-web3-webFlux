@@ -87,4 +87,33 @@ public class UsuarioService {
         }).subscribeOn(Schedulers.boundedElastic());
     }
 
+    public Mono<UsuarioResponse> update(UsuarioRequest usuarioRequest, String usuarioId) {
+        return Mono.defer(() ->{
+            log.info("Deletando usario -{}", usuarioId);
+            return repository.existsByUsuarioId(usuarioId).flatMap(exists -> {
+                if (exists){
+                    return repository.findById(usuarioId).flatMap(usuario -> {
+                        usuario.setDocumento(usuarioRequest.documento());
+                        usuario.setEmail(usuarioRequest.email());
+                        usuario.setSenha(usuarioRequest.senha());
+                        usuario.setNome(usuarioRequest.nome());
+                        return repository.save(usuario).map(Usuario::toResponse);
+                });
+                }  else return Mono.error(new UserNotFoundException("Usuario nao encontrado pelo id informado"));
+            });
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
+
+    public Mono<Void> delete(String usuarioId) {
+        return Mono.defer(() ->{
+            log.info("Deletando usario -{}", usuarioId);
+            return repository.existsByUsuarioId(usuarioId).flatMap(exists ->
+            {
+                if (exists){
+                    return repository.findById(usuarioId).flatMap(
+                            repository::delete);
+                }  else return Mono.error(new UserNotFoundException("Usuario nao encontrado pelo id informado"));
+            });
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
 }

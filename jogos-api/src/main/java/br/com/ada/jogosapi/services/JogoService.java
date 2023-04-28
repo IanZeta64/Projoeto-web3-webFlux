@@ -120,8 +120,7 @@ public class JogoService {
     public Mono<JogoResponse> update(JogoRequest jogoRequest, String jogoId) {
         return Mono.defer(() ->{
             log.info("Atualizando jogo -{}", jogoRequest);
-            return repository.existsByJogoId(jogoId).flatMap(exists ->
-                    {
+            return repository.existsByJogoId(jogoId).flatMap(exists -> {
                         if (exists){
             return repository.findById(jogoId).flatMap(
                     jogo -> {
@@ -132,6 +131,19 @@ public class JogoService {
                     });
                         }  else return Mono.error(new GameNotFoundException("Jogo nao encontrado pelo id informado"));
                     });
+        }).subscribeOn(Schedulers.boundedElastic());
+    }
+
+    public Mono<Void> delete(String jogoId) {
+        return Mono.defer(() ->{
+            log.info("Atualizando jogo -{}", jogoId);
+            return repository.existsByJogoId(jogoId).flatMap(exists ->
+            {
+                if (exists){
+                    return repository.findById(jogoId).flatMap(
+                            repository::delete);
+                }  else return Mono.error(new GameNotFoundException("Jogo nao encontrado pelo id informado"));
+            });
         }).subscribeOn(Schedulers.boundedElastic());
     }
 }

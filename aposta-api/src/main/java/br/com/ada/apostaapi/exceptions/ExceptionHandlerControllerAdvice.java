@@ -25,7 +25,7 @@ public class ExceptionHandlerControllerAdvice extends ResponseEntityExceptionHan
     @ExceptionHandler(UnauthorizedBalanceTransactionException.class)
     public ResponseEntity<Object> handleUnauthorizedBalanceTransactionException(UnauthorizedBalanceTransactionException ex) {
         String errorMessage = ex.getMessage();
-        HttpStatus httpStatus = HttpStatus.FORBIDDEN;
+        HttpStatus httpStatus = HttpStatus.UNAUTHORIZED;
         return new ResponseEntity<>(errorMessage, httpStatus);
     }
 
@@ -41,10 +41,22 @@ public class ExceptionHandlerControllerAdvice extends ResponseEntityExceptionHan
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         return new ResponseEntity<>(errorMessage, httpStatus);
     }
+    @ExceptionHandler(GameNotFoundException.class)
+    public ResponseEntity<Object> handleGameNotFoundException(GameNotFoundException ex) {
+        String errorMessage = ex.getMessage();
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        return new ResponseEntity<>(errorMessage, httpStatus);
+    }
     @ExceptionHandler(ClientErrorException.class)
     public ResponseEntity<Object> handleClientErrorException(ClientErrorException ex) {
         String errorMessage = ex.getMessage();
         HttpStatus httpStatus = HttpStatus.FORBIDDEN;
+        return new ResponseEntity<>(errorMessage, httpStatus);
+    }
+    @ExceptionHandler(MicrosservicesConnectionException.class)
+    public ResponseEntity<Object> handleMicrosservicesConnectionException(MicrosservicesConnectionException ex) {
+        String errorMessage = ex.getMessage();
+        HttpStatus httpStatus = HttpStatus.SERVICE_UNAVAILABLE;
         return new ResponseEntity<>(errorMessage, httpStatus);
     }
 }
