@@ -55,8 +55,8 @@ public class UsuarioController {
     public Mono<ResponseEntity<Mono<UsuarioResponse>>> atualizar(@PathVariable("id") String usuarioId, @RequestBody UsuarioRequest usuarioRequest){
         return Mono.defer(() -> service.update(usuarioRequest, usuarioId).subscribeOn(Schedulers.parallel())
                 .map(jogoResponse -> ResponseEntity.ok(Mono.just(jogoResponse)))
-                .doOnError(err -> log.error("Error ao deletar jogo - {}", err.getMessage()))
-                .doOnNext(it -> log.info("Jogo deletado com sucesso - {}", it)));
+                .doOnError(err -> log.error("Error ao atualizar usuario - {}", err.getMessage()))
+                .doOnNext(it -> log.info("Usuario atualizado com sucesso - {}", it)));
     }
 
 
@@ -64,8 +64,8 @@ public class UsuarioController {
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Mono<Void>>> alterarStatus(@PathVariable("id") String usuarioId){
         return Mono.defer(() -> service.delete(usuarioId).subscribeOn(Schedulers.parallel())
-                .map(jogoResponse -> ResponseEntity.ok(Mono.just(jogoResponse)))
-                .doOnError(err -> log.error("Error ao deletar jogo - {}", err.getMessage()))
-                .doOnNext(it -> log.info("Jogo deletado com sucesso - {}", it)));
+                .map(usuarioResponse -> ResponseEntity.ok(Mono.just(usuarioResponse)))
+                .doOnError(err -> log.error("Error ao deletar isuario - {}", err.getMessage()))
+                .doOnNext(it -> log.info("Usuario deletado com sucesso - {}", it)));
     }
 }

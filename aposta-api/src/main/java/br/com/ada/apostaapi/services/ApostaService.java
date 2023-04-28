@@ -8,10 +8,7 @@ import br.com.ada.apostaapi.client.dto.TransacaoDTO;
 import br.com.ada.apostaapi.enums.Premiacao;
 import br.com.ada.apostaapi.enums.Status;
 import br.com.ada.apostaapi.enums.TipoTransacao;
-import br.com.ada.apostaapi.exceptions.BetNotFoundException;
-import br.com.ada.apostaapi.exceptions.FinishedGameException;
-import br.com.ada.apostaapi.exceptions.InvalidTeamException;
-import br.com.ada.apostaapi.exceptions.UnauthorizedBalanceTransactionException;
+import br.com.ada.apostaapi.exceptions.*;
 import br.com.ada.apostaapi.model.*;
 import br.com.ada.apostaapi.requests.ApostaRequest;
 import br.com.ada.apostaapi.repositories.ApostaRepository;
@@ -181,6 +178,17 @@ public class ApostaService {
             return repository.save(aposta);
         }).subscribeOn(Schedulers.boundedElastic());
 
+    }
+
+    public Mono<Void> delete(String apostaId) {
+        return Mono.defer(() ->{
+            log.info("Deletando usario -{}", apostaId);
+            return repository.existsById(apostaId).flatMap(exists -> {
+                if (exists){
+                    return repository.findById(apostaId).flatMap(repository::delete);
+                }  else return Mono.error(new UserNotFoundException("Usuario nao encontrado pelo id informado"));
+            });
+        }).subscribeOn(Schedulers.boundedElastic());
     }
 }
 
