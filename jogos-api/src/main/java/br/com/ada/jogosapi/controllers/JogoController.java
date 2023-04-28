@@ -5,6 +5,7 @@ import br.com.ada.jogosapi.responses.JogoResponse;
 import br.com.ada.jogosapi.services.JogoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -18,6 +19,7 @@ import reactor.core.scheduler.Schedulers;
 public class JogoController {
     private final JogoService service;
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public Mono<ResponseEntity<Mono<JogoResponse>>> novaPartida(@RequestBody JogoRequest jogoRequest){
         return Mono.defer(() ->
@@ -27,6 +29,8 @@ public class JogoController {
                     .doOnNext(it -> log.info("Jogo salvo com sucesso - {}", it)));
 
     }
+
+
     @PutMapping("/{id}")
     public Mono<ResponseEntity<Mono<JogoResponse>>> alterarPartida(@RequestBody JogoRequest jogoRequest, @PathVariable("id") String jogoId){
         return Mono.defer(() ->
@@ -77,5 +81,13 @@ public class JogoController {
                 .map(jogoResponse -> ResponseEntity.ok(Mono.just(jogoResponse)))
                 .doOnError(err -> log.error("Error ao atualizar status - {}", err.getMessage()))
                 .doOnNext(it -> log.info("Status alterado - {}", it));
+    }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public Mono<ResponseEntity<Mono<Void>>> alterarStatus(@PathVariable("id") String jogoId){
+        return Mono.defer(() -> service.delete(jogoId).subscribeOn(Schedulers.parallel())
+                .map(jogoResponse -> ResponseEntity.ok(Mono.just(jogoResponse)))
+                .doOnError(err -> log.error("Error ao deletar jogo - {}", err.getMessage()))
+                .doOnNext(it -> log.info("Jogo deletado com sucesso - {}", it)));
     }
 }

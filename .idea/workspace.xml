@@ -5,80 +5,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5987607-f9da-42b3-80d2-c097f3f7cc07" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__antlr_antlr_2_7_7.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_woodstox_woodstox_core_6_2_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_code_gson_gson_2_9_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_19_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_netflix_eureka_eureka_client_2_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_netflix_eureka_eureka_core_2_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_netflix_netflix_commons_netflix_eventbus_0_3_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_netflix_netflix_commons_netflix_infix_0_3_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_netflix_servo_servo_core_0_12_21.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_stoyanr_evictor_1_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__com_thoughtworks_xstream_xstream_1_4_19.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_15.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_configuration_commons_configuration_1_10.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_jxpath_commons_jxpath_1_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__commons_lang_commons_lang_2_6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_x_stream_mxparser_1_2_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__jakarta_inject_jakarta_inject_api_2_0_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__jakarta_servlet_jakarta_servlet_api_6_0_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__jakarta_ws_rs_jakarta_ws_rs_api_3_1_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__joda_time_joda_time_2_3.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_antlr_antlr_runtime_3_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_antlr_stringtemplate_3_2_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_math_2_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_client5_httpclient5_5_1_4.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_core5_httpcore5_5_1_5.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_core5_httpcore5_h2_5_1_5.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpclient_4_5_14.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_httpcomponents_httpcore_4_4_16.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_jettison_jettison_1_4_0.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_codehaus_woodstox_stax2_api_4_2_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_cache_3_0_5.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_boot_spring_boot_starter_cache_3_0_6.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_loadbalancer_4_0_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_netflix_eureka_client_4_0_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_starter_loadbalancer_4_0_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_starter_netflix_eureka_client_3_1_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_security_spring_security_crypto_6_0_2.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_context_support_6_0_7.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_spring_context_support_6_0_8.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__xmlpull_xmlpull_1_1_3_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/ClientErrorException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/UserNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/src/main/java/br/com/ada/eurekaserver/EurekaServerApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/eureka-server/src/test/java/br/com/ada/eurekaserver/EurekaServerApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_annotations_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_bulkhead_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_circuitbreaker_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_circularbuffer_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_consumer_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_core_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_framework_common_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_micrometer_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_ratelimiter_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_reactor_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_retry_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_spring6_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_spring_boot3_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_github_resilience4j_resilience4j_timelimiter_2_0_2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_micrometer_micrometer_core_1_10_5.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_circuitbreaker_resilience4j_3_0_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_springframework_cloud_spring_cloud_starter_circuitbreaker_resilience4j_3_0_1.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/GameNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/MicrosservicesConnectionException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aposta-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/ApostaApiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/ApostaApiApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/client/JogoClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/client/JogoClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/client/UsuarioClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/client/UsuarioClient.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/ExceptionHandlerControllerAdvice.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/ExceptionHandlerControllerAdvice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/FnishedGameException.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/exceptions/FinishedGameException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/job/DepositarPremiacaoJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/job/DepositarPremiacaoJob.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/services/ApostaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/java/br/com/ada/apostaapi/services/ApostaService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/aposta-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/aposta-api/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway-api/src/main/java/br/com/ada/gatewayapi/GatewayApiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-api/src/main/java/br/com/ada/gatewayapi/GatewayApiApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gateway-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gateway-api/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jogos-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jogos-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/JogosApiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/JogosApiApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jogos-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/jogos-api/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usuario-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/usuario-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/UsuarioApiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/UsuarioApiApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/usuario-api/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/usuario-api/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/controllers/JogoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/controllers/JogoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/services/JogoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/jogos-api/src/main/java/br/com/ada/jogosapi/services/JogoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/controllers/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/controllers/UsuarioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/repositories/UsarioReactiveRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/repositories/UsarioReactiveRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/services/UsuarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/usuario-api/src/main/java/br/com/ada/usuarioapi/services/UsuarioService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,6 +75,7 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "last_opened_file_path": "C:/Users/Ian Paschoal/Documents/GitHub/Projoeto-web3-webFlux",
     "node.js.detected.package.eslint": "true",
@@ -133,6 +91,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="br.com.ada.apostaapi.exceptions" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="br.com.ada.apostaapi.exceptions" />
     </key>
@@ -144,7 +105,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.GatewayApiApplication">
+  <component name="RunManager" selected="Spring Boot.UsuarioApiApplication">
     <configuration name="ApostaApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="aposta-api" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="br.com.ada.apostaapi.ApostaApiApplication" />
@@ -197,7 +158,7 @@
       <option name="presentableId" value="Default" />
       <updated>1682540219161</updated>
       <workItem from="1682540220418" duration="86000" />
-      <workItem from="1682546092503" duration="5495000" />
+      <workItem from="1682546092503" duration="16427000" />
     </task>
     <servers />
   </component>

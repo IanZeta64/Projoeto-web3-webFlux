@@ -16,8 +16,12 @@ import br.com.ada.apostaapi.model.*;
 import br.com.ada.apostaapi.requests.ApostaRequest;
 import br.com.ada.apostaapi.repositories.ApostaRepository;
 import br.com.ada.apostaapi.responses.ApostaResponse;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -33,6 +37,17 @@ public class ApostaService {
     private final ApostaRepository repository;
     private final JogoClient jogoClient;
     private final UsuarioClient usuarioClient;
+
+
+//    private final ReactiveCircuitBreaker reactiveCircuitBreakerFactory;
+
+//    public ApostaService(ApostaRepository repository, JogoClient jogoClient, UsuarioClient usuarioClient, ReactiveCircuitBreakerFactory<?,?> reactiveCircuitBreakerFactory) {
+//        this.repository = repository;
+//        this.jogoClient = jogoClient;
+//        this.usuarioClient = usuarioClient;
+//        this.reactiveCircuitBreakerFactory = reactiveCircuitBreakerFactory.create("aposta-api-circuit-breaker");
+//    }
+
 
 
     private Mono<ApostaAuxDTO> calcularCoeficiente(String id, String time) {
@@ -62,6 +77,7 @@ public class ApostaService {
                 }));
     }
 
+    @CircuitBreaker(name = "aposta-api-circuit-breaker", fallbackMethod = "fall")
     public Mono<ApostaResponse> save(ApostaRequest apostaRequest) {
         return Mono.defer(() -> calcularCoeficiente(apostaRequest.jogoId(), apostaRequest.timeApostado())
                         .flatMap(apostaAuxDTO -> usuarioClient.buscarUsuarioPorId(apostaRequest.userId())

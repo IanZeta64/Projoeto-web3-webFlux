@@ -6,6 +6,7 @@ import br.com.ada.usuarioapi.responses.UsuarioResponse;
 import br.com.ada.usuarioapi.services.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -48,5 +49,23 @@ public class UsuarioController {
                 .map(usuarioResponse -> ResponseEntity.ok(Mono.just(usuarioResponse)))
                 .doOnError(err -> log.error("Error na transção - {}", err.getMessage()))
                 .doOnNext(it -> log.info("Transação realizada com sucesso - {}", it));
+    }
+
+    @PutMapping("/{id}")
+    public Mono<ResponseEntity<Mono<UsuarioResponse>>> atualizar(@PathVariable("id") String usuarioId, @RequestBody UsuarioRequest usuarioRequest){
+        return Mono.defer(() -> service.update(usuarioRequest, usuarioId).subscribeOn(Schedulers.parallel())
+                .map(jogoResponse -> ResponseEntity.ok(Mono.just(jogoResponse)))
+                .doOnError(err -> log.error("Error ao deletar jogo - {}", err.getMessage()))
+                .doOnNext(it -> log.info("Jogo deletado com sucesso - {}", it)));
+    }
+
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public Mono<ResponseEntity<Mono<Void>>> alterarStatus(@PathVariable("id") String usuarioId){
+        return Mono.defer(() -> service.delete(usuarioId).subscribeOn(Schedulers.parallel())
+                .map(jogoResponse -> ResponseEntity.ok(Mono.just(jogoResponse)))
+                .doOnError(err -> log.error("Error ao deletar jogo - {}", err.getMessage()))
+                .doOnNext(it -> log.info("Jogo deletado com sucesso - {}", it)));
     }
 }
